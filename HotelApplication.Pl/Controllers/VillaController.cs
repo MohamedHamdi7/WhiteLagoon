@@ -29,8 +29,18 @@ namespace HotelApplication.Controllers
         [HttpPost]
         public IActionResult Create(Villa model)
         {
-
-            return View();
+            if (model.Name == model.Description)  //Custom Model Validation
+            {
+                ModelState.AddModelError("Name", "The Name and Description cannot be the same.");
+            }
+            if (ModelState.IsValid) //Server Side Validation
+            {
+                applicationDbContext.Villas.Add(model);
+                applicationDbContext.SaveChanges();
+              return RedirectToAction("Index");
+            }
+            return View(model);
+            
         }
     }
 }
